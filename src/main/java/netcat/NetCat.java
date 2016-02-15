@@ -49,14 +49,13 @@ public class NetCat {
 		transferStreams(socket);
 	}
 
-	private static void transferStreams(Socket socket) throws IOException,
-			InterruptedException {
+	private static void transferStreams(Socket socket) throws IOException, InterruptedException {
 		InputStream input1 = System.in;
 		OutputStream output1 = socket.getOutputStream();
 		InputStream input2 = socket.getInputStream();
 		PrintStream output2 = System.out;
-		Thread thread1 = new Thread(new StreamTransferer(input1, output1));
-		Thread thread2 = new Thread(new StreamTransferer(input2, output2));
+		Thread thread1 = new Thread(new Pipe(input1, output1));
+		Thread thread2 = new Thread(new Pipe(input2, output2));
 		thread1.start();
 		thread2.start();
 		thread1.join();
