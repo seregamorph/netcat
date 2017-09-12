@@ -19,11 +19,9 @@ public class NetCat {
 
 		CommandLine line = parser.parse(options, args);
 
-		if (line.hasOption('l')) {
-			if (line.hasOption('p')) {
-				int port = Integer.parseInt(line.getOptionValue('p'));
-				listen(port);
-			}
+		if (line.hasOption('l') && (line.hasOption('p'))) {
+			int port = Integer.parseInt(line.getOptionValue('p'));
+			listen(port);
 		} else {
 			if (line.hasOption('p')) {
 				int port = Integer.parseInt(line.getOptionValue('p'));
