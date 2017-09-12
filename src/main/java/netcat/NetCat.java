@@ -19,11 +19,11 @@ public class NetCat {
 
 		CommandLine line = parser.parse(options, args);
 
-		if (line.hasOption('l') && (line.hasOption('p'))) {
+		if (line.hasOption('l') && line.hasOption('p')) {
 			int port = Integer.parseInt(line.getOptionValue('p'));
 			listen(port);
 		} else {
-			if (line.hasOption('p')) {
+			if (line.hasOption('p') && (line.getArgs().length > 0)) {
 				int port = Integer.parseInt(line.getOptionValue('p'));
 				connect(line.getArgs()[0], port);
 			} else {
