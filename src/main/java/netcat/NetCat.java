@@ -36,7 +36,14 @@ public class NetCat {
 	private static void connect(String host, int port) throws Exception {
 		System.err.println("Connecting to " + host + " port " + port);
 		final Socket socket = new Socket(host, port);
-		transferStreams(socket);
+		System.err.println("Connected");
+
+		InputStream input1 = System.in;
+		OutputStream output1 = socket.getOutputStream();
+		Thread thread1 = new Thread(new Pipe(input1, output1));
+		thread1.start();
+		thread1.join();
+		socket.shutdownOutput();
 	}
 
 	private static void listen(int port) throws Exception {
@@ -44,20 +51,13 @@ public class NetCat {
 		ServerSocket serverSocket = new ServerSocket(port);
 		Socket socket = serverSocket.accept();
 		System.err.println("Accepted");
-		transferStreams(socket);
-	}
 
-	private static void transferStreams(Socket socket) throws IOException, InterruptedException {
-		InputStream input1 = System.in;
-		OutputStream output1 = socket.getOutputStream();
 		InputStream input2 = socket.getInputStream();
 		PrintStream output2 = System.out;
-		Thread thread1 = new Thread(new Pipe(input1, output1));
 		Thread thread2 = new Thread(new Pipe(input2, output2));
-		thread1.start();
 		thread2.start();
-		thread1.join();
-		socket.shutdownOutput();
 		thread2.join();
+		socket.shutdownOutput();
 	}
+
 }
